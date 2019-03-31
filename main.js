@@ -2,6 +2,7 @@
 
 var gameData = {
 	walletBalance: 0,
+	lifetimeBalance: 0,
 	// Solving math problems is how to get Mikecoins
 	// increase this with some kind of weird helper like ants in the wires
 	problemsPerClick: 1
@@ -24,38 +25,88 @@ function updateEventLog(incomingEvent) {
 	event1 = "Event: " + incomingEvent + "<br>";
 
 	document.getElementById("event-log").innerHTML = 
-		"<span>" + event5 + "</span>" + "\n" +
-		"<span>" + event4 + "</span>" + "\n" +
+		//"<span>" + event5 + "</span>" + "\n" +
+		//"<span>" + event4 + "</span>" + "\n" +
 		"<span>" + event3 + "</span>" + "\n" +
 		"<span>" + event2 + "</span>" + "\n" +
 		"<span><b>" + event1 + "</b></span>" + "\n";
 }
 
 
-function updateInventory(item, quantity) {
-
-}
-
 
 // Store
-var itemsForSale = [
-
-];
-var level1GraphicsCard = {name: "Invideo GFX 110 Graphics Card", cost: 50, problemsPerSecond: 1, costToUnlock: 25};
+var itemsForSale = [];
+var level1GraphicsCard = {id: 1, name: "Invideo GFX 110 Graphics Card", cost: 50, problemsPerSecond: 1, costToUnlock: 25};
 
 itemsForSale.push(level1GraphicsCard);
 
 function updateStore() {
-	storeContents = "The store doesn't have anything for sale yet!";
 
 	for (var i = 0; i < itemsForSale.length; i++) {
-		if (gameData.walletBalance >= itemsForSale[i].costToUnlock) {
-			storeContents = "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><br>";
+		document.getElementById("store").innerHTML = ""
+		if (gameData.lifetimeBalance >= itemsForSale[i].costToUnlock) {
+			var storeContents = document.createElement('span');
+			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><button onclick=\"buyItem(1,1)\">Buy 1</button><br><br>";
+
+			document.getElementById("store").appendChild(storeContents);
+		} else {
+			var storeContents = "The store doesn't have anything for sale yet!";
+			document.getElementById("store").innerHTML = storeContents;
 		}
 		//storeContents = storeContents += "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><br>";
 	}
 
-	document.getElementById("store").innerHTML = storeContents;
+	//document.getElementById("store").innerHTML = storeContents;
+}
+
+
+// Inventory
+
+var inventoryArray = [];
+
+function updateInventory(itemId, quantity) {
+	console.log(itemId, quantity)
+
+	for (var i = 0; i < itemsForSale.length; i++) {
+		if (itemsForSale[i].id == itemId) {
+			inventoryArray.push(itemsForSale[i].name)
+			console.log(itemsForSale[i].name)
+		}
+	}
+
+	if (inventoryArray.length > 0) {
+		document.getElementById("inventory").innerHTML = ""
+
+		for (var i = 0; i < inventoryArray.length; i++) {
+
+			inventoryContents = document.createElement('span');
+			inventoryContents.innerHTML = "Name: " + inventoryArray[i] + "<br>";
+
+			document.getElementById("inventory").appendChild(inventoryContents);
+
+		}
+	} else {
+		var inventoryContents = "You don't currently have any items!"
+		document.getElementById("inventory").innerHTML = inventoryContents;
+	}
+}
+
+
+// Buying an item
+
+function buyItem(itemId, quantity) {
+	for (var i = 0; i < itemsForSale.length; i++) {
+		if (itemsForSale[i].id == itemId) {
+			if (gameData.walletBalance >= itemsForSale[i].cost) {
+				gameData.walletBalance -= itemsForSale[i].cost * quantity;
+				document.getElementById("mikecoin-balance").innerHTML =  gameData.walletBalance;
+				updateInventory(itemId, quantity);
+				//console.log("Bought it!")
+			} else {
+				console.log("Not enough money!");
+			}
+		}
+	}
 }
 
 
@@ -95,20 +146,24 @@ function solveProblem() {
 	var payout = Math.floor(Math.random() * payoutRange) + 5;
 
 	if (num1 + num2 == solution) {
-		var problem = num1 + " + " + num2 + " = " + solution + "<font color=\"green\">&#x2713;</font>";
+		var problem = num1 + " + " + num2 + " = " + solution + " <font color=\"green\">&#x2713;</font>";
 		updateScreen(problem);
 
 		var payoutEvent = "You have earned " + payout + " Mikecoins!";
 		updateEventLog(payoutEvent);
 
+		// Update current wallet and lifetime count
 		gameData.walletBalance = gameData.walletBalance + payout;
+		gameData.lifetimeBalance = gameData.lifetimeBalance + payout;
+
 		problemSolved = true;
 	} else {
-		var problem =  num1 + " + " + num2 + " = " + solution + "<font color=\"red\">&#x2717;</font>";
+		var problem =  num1 + " + " + num2 + " = " + solution + " <font color=\"red\">&#x2717;</font>";
 		updateScreen(problem);
 
 	}
 	document.getElementById("mikecoin-balance").innerHTML =  gameData.walletBalance;
+	document.getElementById("lifetime-balance").innerHTML =  gameData.lifetimeBalance;
 	updateStore();
 }
 
