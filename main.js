@@ -5,7 +5,8 @@ var gameData = {
 	lifetimeBalance: 0,
 	// Solving math problems is how to get Mikecoins
 	// increase this with some kind of weird helper like ants in the wires
-	problemsPerClick: 1
+	problemsPerClickTotal: 1,
+	problemsPerSecondTotal: 0
 }
 
 
@@ -35,24 +36,47 @@ function updateEventLog(incomingEvent) {
 
 
 // Store
-var itemsForSale = [];
-var level1GraphicsCard = {id: 1, name: "Invideo GFX 110 Graphics Card", cost: 50, problemsPerSecond: 1, costToUnlock: 25};
-
-itemsForSale.push(level1GraphicsCard);
+var itemsForSale = [
+	{id: 1, name: "Mikecoin hat", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 5, unlocked: false},
+	{id: 2, name: "Mikecoin t-shirt", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
+	{id: 3, name: "Invideo GFX 410 Graphics Card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
+	{id: 3, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
+	{id: 4, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false}
+];
 
 function updateStore() {
 
-	for (var i = 0; i < itemsForSale.length; i++) {
-		document.getElementById("store").innerHTML = ""
-		if (gameData.lifetimeBalance >= itemsForSale[i].costToUnlock) {
-			var storeContents = document.createElement('span');
-			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><button onclick=\"buyItem(1,1)\">Buy 1</button><br><br>";
+	//var storeContents;
+	//storeContents.innerHTML = "The store doesn't have anything for sale yet!";
 
+	
+	for (var i = 0; i < itemsForSale.length; i++) {
+		//console.log(itemsForSale[i].name);
+		
+		if ((gameData.lifetimeBalance >= itemsForSale[i].costToUnlock) &&  itemsForSale[i].unlocked == false) {
+			
+			try {
+				document.getElementById("store").removeChild(document.getElementById("store-placeholder"));
+			} catch {
+				console.log("nothing to remove from store")
+			}
+			
+			itemsForSale[i].unlocked = true;
+			console.log("time to show " + itemsForSale[i].name);
+			var storeContents = document.createElement('span');
+			var storeContentsId = "store-item-" + itemsForSale[i].id;
+			storeContents.setAttribute("id", storeContentsId)
+			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
+			console.log(storeContents);
 			document.getElementById("store").appendChild(storeContents);
-		} else {
-			var storeContents = "The store doesn't have anything for sale yet!";
-			document.getElementById("store").innerHTML = storeContents;
-		}
+
+		} /*else {
+			var storeContents = document.createElement('span');
+			storeContents.innerHTML = "The store doesn't have anything for sale yet!";
+			storeContents.setAttribute("id", "store-placeholder");
+			document.getElementById("store").appendChild(storeContents);
+		}*/
+		//document.getElementById("store").appendChild(storeContents);
 		//storeContents = storeContents += "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><br>";
 	}
 
@@ -72,8 +96,8 @@ function updateInventory(itemId, quantity) {
 			if (inventoryArray.length > 0) {
 				// Check to see if item is already in array 
 				for (var j = 0; j < inventoryArray.length; j++) {
-					if (inventoryArray[i][0] ==  itemsForSale[i].id) {
-						inventoryArray[i][2] += quantity
+					if (inventoryArray[j][0] ==  itemsForSale[i].id) {
+						inventoryArray[j][2] += quantity
 					}
 				}
 			} else {
@@ -85,12 +109,19 @@ function updateInventory(itemId, quantity) {
 	}
 
 	if (inventoryArray.length > 0) {
-		document.getElementById("inventory").innerHTML = ""
+		
+		try {
+			document.getElementById("inventory").removeChild(document.getElementById("inventory-placeholder"));
+		} catch {
+			console.log("nothing to remove from inventory")
+		}
 
-		for (var i = 0; i < inventoryArray.length; i++) {
+		for (var k = 0; k < inventoryArray.length; k++) {
 
 			inventoryContents = document.createElement('span');
-			inventoryContents.innerHTML = "Name: " + inventoryArray[i][1] + "<br>Quantity: " + inventoryArray[i][2] + "<br>";
+			var inventoryContentsId = "inventory-item-" + inventoryArray[k].id;
+			inventoryContents.setAttribute("id", inventoryContentsId)
+			inventoryContents.innerHTML = "Name: " + inventoryArray[k][1] + "<br>Quantity: " + inventoryArray[k][2] + "<br>";
 
 			document.getElementById("inventory").appendChild(inventoryContents);
 
@@ -108,10 +139,17 @@ function buyItem(itemId, quantity) {
 	for (var i = 0; i < itemsForSale.length; i++) {
 		if (itemsForSale[i].id == itemId) {
 			if (gameData.walletBalance >= itemsForSale[i].cost) {
+
 				gameData.walletBalance -= itemsForSale[i].cost * quantity;
 				document.getElementById("mikecoin-balance").innerHTML =  gameData.walletBalance;
 				updateInventory(itemId, quantity);
-				//console.log("Bought it!")
+				gameData.problemsPerClickTotal += itemsForSale[i].problemsPerClick;
+				gameData.problemsPerSecondTotal += itemsForSale[i].problemsPerSecond;
+				console.log(gameData.problemsPerSecondTotal)
+				updateEventLog("Bought 1 " + itemsForSale[i].name);
+
+				itemsForSale[i].cost = Math.floor(itemsForSale[i].cost * 1.1);
+				//updateStore();
 			} else {
 				console.log("Not enough money!");
 			}
@@ -124,14 +162,24 @@ function buyItem(itemId, quantity) {
 var screen1 = "<br>";
 var screen2 = "<br>";
 var screen3 = "<br>";
+var screen4 = "<br>";
+var screen5 = "<br>";
+var screen6 = "<br>";
 
 function updateScreen(screenUpdateText) {
 
+
+	screen6 = screen5;
+	screen5 = screen4;
+	screen4 = screen3;
 	screen3 = screen2;
 	screen2 = screen1;
 	screen1 = screenUpdateText + "<br>";
 
 	document.getElementById("screen").innerHTML = 
+	"<span>" + screen6 + "</span>" + "\n" +
+	"<span>" + screen5 + "</span>" + "\n" +
+	"<span>" + screen4 + "</span>" + "\n" +
 	"<span>" + screen3 + "</span>" + "\n" +
 	"<span>" + screen2 + "</span>" + "\n" +
 	"<span><b>" + screen1 + "</b></span>" + "\n";
@@ -152,7 +200,7 @@ function solveProblem() {
 		problemSolved = false;
 	}
 	var solution = Math.floor(Math.random() * 11);
-	var payoutRange = gameData.problemsPerClick * 5;
+	var payoutRange = 1 * 5;
 	var payout = Math.floor(Math.random() * payoutRange) + 5;
 
 	if (num1 + num2 == solution) {
@@ -177,71 +225,20 @@ function solveProblem() {
 	updateStore();
 }
 
-
-
-
-
-/*
-$(document).ready(function(){
-	/*var name = prompt("Is your name Mike? (Y/N)");
-	if (name.toLowerCase() == "y") {
-		alert("Welcome, Mike! Have some Mikecoins!");
-		walletBalance = walletBalance + 1000;
-		$('#walletBalance').html(walletBalance);
-	} else {
-		alert("Welcome, not-Mike, have some Mikecoins anyway!")
-		walletBalance = walletBalance + 100;
-		$('#walletBalance').html(walletBalance);
+function clickToSolveProblem() {
+	for (var n = 0; n < gameData.problemsPerClickTotal; n++) {
+		window.requestAnimationFrame(solveProblem);
 	}
+}
 
-	var graphics = prompt("How powerful is your graphics card on a scale from 1-5?");
-	switch (graphics) {
-		case '1': graphicsMultiplier = 1;
-			break;
-		case '2':  graphicsMultiplier = 2;
-			break;
-		case '3': graphicsMultiplier = 3;
-			break;
-		case '4': graphicsMultiplier = 4;
-			break;
-		case '5': graphicsMultiplier = 5;
-			break;
-		default: graphicsMultiplier = 1;
-				break;
+var mainGameLoop = window.setInterval(function() {
+	for (var n = 0; n < gameData.problemsPerSecondTotal; n++) {
+	//var timer1 = setTimeout
+	//if (inventoryArray.length > 0 ) {
+		//solveProblem();
+		window.requestAnimationFrame(solveProblem);
 	}
+	//window.requestAnimationFrame();
+}, 1000)
 
-	$("#gather").click(function(){
-		if (problemSolved) {
-			num1 = Math.floor(Math.random() * 6);
-			num2 = Math.floor(Math.random() * 6);
-			problemSolved = false;
-		}
-		var solution = Math.floor(Math.random() * 11);
-		var payoutRange = graphicsMultiplier * 5;
-		var payout = Math.floor(Math.random() * payoutRange) + 5;
-		$('#num1').html(num1);
-		$('#num2').html(num2);
-
-		if (num1 + num2 == solution) {
-			$('#solution').html(solution + "&#x2713;");
-
-// TODO: Add event log
-			var payoutEvent = "You have earned " + payout + " Mikecoins!";
-			$('#event').html(payoutEvent);
-
-			walletBalance = walletBalance + payout;
-			problemSolved = true;
-		} else {
-			$('#solution').html(solution + "&#x2717;");
-		}
-		$('#walletBalance').html(walletBalance);
-	});
-
-// TODO: Build Mike store
-	$("#store").click(function(){
-		alert("Welcome to the store!!! What would you like to buy????/");
-
-	});
-});
-
-*/
+  
