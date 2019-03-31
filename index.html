@@ -1,21 +1,44 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Gather some Mikecoins!!!</title>
-	<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
-	<script type="text/javascript" src="scripts.js"></script>
+	<meta charset="utf-8">
+	<title>Mikecoin Miner HD</title>
 </head>
 <body>
 	<h1>Welcome to Mikecoin</h1>
-	<h2>The Web's Hottest Cryptocurrency</h2>
-	<div id="instructions"><h3>Instructions: Click the buttons to do what they say.</h3></div>
-	<div id="wallet">Wallet: <span id="walletBalance">0</span> Mikecoins</div>
-	<button id="gather">Gather some Mikecoins</button>
-	<div id="math">Solve <span id="num1"></span> + <span id="num2"></span> = <span id="solution"></span></div>
-	<div id="eventlog">Event: <span id="event"></span></div>
+	<p>The Web's Hottest Cryptocurrency</p>
+	<div id="instructions"><p>Instructions: Solve problems to gather Mikecoins.</p></div>
+	<div id="event-log">
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+	</div>
+	<br>
+	<b>Crypto Wallet:</b>
+	<div id="wallet">
+		<span id="mikecoin-balance">0</span> Mikecoins
+	</div>
+	<br>
+	<div id="screen">
+		<br>
+		<br>
+		<br>
+	</div>
+	<button id="gather" onclick="solveProblem()">Attempt to solve problem</button>
 	<br>
 	<br>
+	<b>Inventory:</b>
+	<div id="inventory">
+	You don't currently have any items!
+	</div>
 	<br>
-	<br>
-	<button id="store">Spend some Mikecoins at the Mikecoins store!</button>
+	<b>Store:</b>
+	<div id="store">
+	The store doesn't have anything for sale yet!
+	</div>
+
+	<script type="text/javascript" src="main.js"></script>
 </body>
 </html>
