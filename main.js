@@ -69,7 +69,17 @@ function updateInventory(itemId, quantity) {
 
 	for (var i = 0; i < itemsForSale.length; i++) {
 		if (itemsForSale[i].id == itemId) {
-			inventoryArray.push(itemsForSale[i].name)
+			if (inventoryArray.length > 0) {
+				// Check to see if item is already in array 
+				for (var j = 0; j < inventoryArray.length; j++) {
+					if (inventoryArray[i][0] ==  itemsForSale[i].id) {
+						inventoryArray[i][2] += quantity
+					}
+				}
+			} else {
+				inventoryArray.push([itemsForSale[i].id, itemsForSale[i].name, quantity])
+			}
+			
 			console.log(itemsForSale[i].name)
 		}
 	}
@@ -80,7 +90,7 @@ function updateInventory(itemId, quantity) {
 		for (var i = 0; i < inventoryArray.length; i++) {
 
 			inventoryContents = document.createElement('span');
-			inventoryContents.innerHTML = "Name: " + inventoryArray[i] + "<br>";
+			inventoryContents.innerHTML = "Name: " + inventoryArray[i][1] + "<br>Quantity: " + inventoryArray[i][2] + "<br>";
 
 			document.getElementById("inventory").appendChild(inventoryContents);
 
