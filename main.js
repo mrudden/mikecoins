@@ -54,7 +54,8 @@ var itemsForSale = [
 	{id: 5, name: "Invideo GFX 410 Graphics Card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
 	{id: 6, name: "Mikecoin t-shirt", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 40, unlocked: false},
 	{id: 7, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
-	{id: 8, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false}
+	{id: 8, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false},
+	{id: 9, name: "ABC Solveon 16 Graphics Card", cost: 650, problemsPerClick: 0, problemsPerSecond: 16, costToUnlock: 1000, unlocked: false}
 ];
 
 function updateStore() {
@@ -151,6 +152,11 @@ function updateInventory(itemId, quantity) {
 		console.log("Updating Inventory. Since inventory was empty, adding this item.")
 		inventoryArray.push(itemToAdd);
 	}
+
+	// Sort the inventory by ID ascending
+	//inventoryArray.sort(function(a, b) {
+	//	return parseFloat(a.id) - parseFloat(b.id);
+	//});
 	
 	// Update the view on the screen
 	if (inventoryArray.length > 0) {
