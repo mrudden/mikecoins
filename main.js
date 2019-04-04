@@ -64,7 +64,7 @@ function updateStore() {
 			}
 			
 			itemsForSale[i].unlocked = true;
-			console.log("Updating Store. time to show " + itemsForSale[i].name);
+			console.log("Updating Store. Showing" + itemsForSale[i].name);
 			var storeContents = document.createElement('span');
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
