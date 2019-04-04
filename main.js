@@ -159,9 +159,15 @@ function updateInventory(itemId, quantity) {
 				inventoryContents = document.createElement('span');
 				var inventoryContentsId = "inventory-item-" + inventoryArray[k].id;
 				inventoryContents.setAttribute("id", inventoryContentsId)
-				inventoryContents.innerHTML = "Name: " + inventoryArray[k].name + "<br>Quantity: <span id=\"inventory-item-" + inventoryArray[k].id + "-quantity\">" + inventoryArray[k].quantity + "</span><br><br>";
+				inventoryContents.innerHTML = "Name: " + inventoryArray[k].name + "<br>Quantity: <span id=\"inventory-item-" + inventoryArray[k].id + "-quantity\">" + inventoryArray[k].quantity + "</span><br>";
 	
+				// If you already have an item in your inventory, append a line break before the next one
+				if (k > 0) {
+					document.getElementById("inventory").appendChild(document.createElement('br'));
+				}
+
 				document.getElementById("inventory").appendChild(inventoryContents);
+
 			}
 
 
