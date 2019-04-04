@@ -53,21 +53,23 @@ function updateStore() {
 	for (var i = 0; i < itemsForSale.length; i++) {
 		//console.log(itemsForSale[i].name);
 		
+		// Show items once you hit a lifetime balance level that unlocks that item.
 		if ((gameData.lifetimeBalance >= itemsForSale[i].costToUnlock) &&  itemsForSale[i].unlocked == false) {
 			
+			// Remove the placeholder if store is no longer empty
 			try {
 				document.getElementById("store").removeChild(document.getElementById("store-placeholder"));
 			} catch {
-				console.log("nothing to remove from store")
+			//	console.log("Updating Store. No placeholder found in array.")
 			}
 			
 			itemsForSale[i].unlocked = true;
-			console.log("time to show " + itemsForSale[i].name);
+			console.log("Updating Store. time to show " + itemsForSale[i].name);
 			var storeContents = document.createElement('span');
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
-			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
-			console.log(storeContents);
+			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
+			//console.log(storeContents);
 			document.getElementById("store").appendChild(storeContents);
 
 		} /*else {
@@ -183,13 +185,18 @@ function buyItem(itemId, quantity) {
 				updateInventory(itemId, quantity);
 				gameData.problemsPerClickTotal += itemsForSale[i].problemsPerClick;
 				gameData.problemsPerSecondTotal += itemsForSale[i].problemsPerSecond;
-				console.log(gameData.problemsPerSecondTotal)
+				//console.log(gameData.problemsPerSecondTotal);
 				updateEventLog("Bought 1 " + itemsForSale[i].name);
 
-				itemsForSale[i].cost = Math.floor(itemsForSale[i].cost * 1.1);
+				// Update the price
+				var newCost = Math.floor(itemsForSale[i].cost * 1.1);
+				console.log("Buying Item. Updating cost of this item from " + itemsForSale[i].cost + " to " + newCost + ".");
+				itemsForSale[i].cost = newCost;
+				// Update price in store view
+				document.getElementById("store-item-" + itemsForSale[i].id + "-cost").innerHTML = itemsForSale[i].cost;
 				//updateStore();
 			} else {
-				console.log("Not enough money!");
+				console.log("Buying Item. Not enough money to purchase! You have " + gameData.walletBalance + " but you need " + itemsForSale[i].cost + ".");
 			}
 		}
 	}
