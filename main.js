@@ -1,12 +1,22 @@
 // Mikecoin scripts!!
 
 var gameData = {
+
+	// How many Mikecoins you have
 	walletBalance: 0,
+	// How many Mikecoins you've ever earned
 	lifetimeBalance: 0,
 	// Solving math problems is how to get Mikecoins
 	// increase this with some kind of weird helper like ants in the wires
 	problemsPerClickTotal: 1,
-	problemsPerSecondTotal: 0
+	problemsPerSecondTotal: 0,
+
+	// How many people are mining or trading Mikecoins
+	communityMembers: 1,
+	communityGrowthPerSecond: 0,
+
+	// How many mikecoins are out there
+	marketCap: 0
 }
 
 
@@ -37,11 +47,14 @@ function updateEventLog(incomingEvent) {
 
 // Store
 var itemsForSale = [
-	{id: 1, name: "Mikecoin hat", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 5, unlocked: false},
-	{id: 2, name: "Mikecoin t-shirt", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
-	{id: 3, name: "Invideo GFX 410 Graphics Card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
-	{id: 4, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
-	{id: 5, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false}
+	{id: 1, name: "Double clicking", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 5, unlocked: false},
+	{id: 2, name: "Better mouse", cost: 30, problemsPerClick: 2, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
+	{id: 3, name: "Ask a friend for help", cost: 30, problemsPerClick: 3, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
+	{id: 4, name: "Mikecoin hat", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 30, unlocked: false},
+	{id: 5, name: "Invideo GFX 410 Graphics Card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
+	{id: 6, name: "Mikecoin t-shirt", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 40, unlocked: false},
+	{id: 7, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
+	{id: 8, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false}
 ];
 
 function updateStore() {
@@ -64,7 +77,7 @@ function updateStore() {
 			}
 			
 			itemsForSale[i].unlocked = true;
-			console.log("Updating Store. Showing" + itemsForSale[i].name);
+			console.log("Updating Store. Showing " + itemsForSale[i].name);
 			var storeContents = document.createElement('span');
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
@@ -191,7 +204,7 @@ function buyItem(itemId, quantity) {
 				updateInventory(itemId, quantity);
 				gameData.problemsPerClickTotal += itemsForSale[i].problemsPerClick;
 				gameData.problemsPerSecondTotal += itemsForSale[i].problemsPerSecond;
-				//console.log(gameData.problemsPerSecondTotal);
+				console.log("Buying Item. Now solving " + gameData.problemsPerSecondTotal + " problems per second.");
 				updateEventLog("Bought 1 " + itemsForSale[i].name);
 
 				// Update the price
@@ -264,6 +277,9 @@ function solveProblem() {
 		// Update current wallet and lifetime count
 		gameData.walletBalance = gameData.walletBalance + payout;
 		gameData.lifetimeBalance = gameData.lifetimeBalance + payout;
+		// Update the Market Cap to include your contributions
+		gameData.marketCap += gameData.lifetimeBalance
+		console.log("Solve Problem. Total Market Cap increased to " + gameData.marketCap)
 
 		problemSolved = true;
 	} else {
@@ -282,14 +298,86 @@ function clickToSolveProblem() {
 	}
 }
 
-var mainGameLoop = window.setInterval(function() {
-	for (var n = 0; n < gameData.problemsPerSecondTotal; n++) {
-	//var timer1 = setTimeout
-	//if (inventoryArray.length > 0 ) {
-		//solveProblem();
-		window.requestAnimationFrame(solveProblem);
-	}
-	//window.requestAnimationFrame();
-}, 1000)
+// TODO: Make auto-solving work right
+// Adapted from https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe#19772220
 
-  
+var stop = false;
+var frameCount = 0;
+var solutionsPerSecond, communityMembersPerSecond, problemSolvingInterval, communityGrowingInterval, startTime, now, then, elapsed;
+
+
+// initialize the timer variables and start the animation
+function changeRates(solutionsPerSecond) {
+	problemSolvingInterval = 1000 / solutionsPerSecond;
+	communityGrowingInterval = 1000 / communityMembersPerSecond;
+	
+    then = Date.now();
+    startTime = then;
+	solveProblemOnInterval();
+	growCommunityOnInterval();
+}
+
+// Updates screen with solved problems
+function solveProblemOnInterval() {
+
+    // request another frame
+
+    requestAnimationFrame(solveProblemOnInterval);
+
+    // calc elapsed time since last loop
+
+    now = Date.now();
+    elapsed = now - then;
+
+    // if enough time has elapsed, draw the next frame
+
+    if (elapsed > problemSolvingInterval) {
+
+        // Get ready for next frame by setting then=now, but also adjust for your
+        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+        then = now - (elapsed % problemSolvingInterval);
+
+		// Put your drawing code here
+		solveProblem();
+
+    }
+}
+
+
+function growCommunityOnInterval() {
+
+    // request another frame
+
+    requestAnimationFrame(growCommunityOnInterval);
+
+    // calc elapsed time since last loop
+
+    now = Date.now();
+    elapsed = now - then;
+
+    // if enough time has elapsed, draw the next frame
+
+    if (elapsed > communityGrowingInterval) {
+
+        // Get ready for next frame by setting then=now, but also adjust for your
+        // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
+        then = now - (elapsed % communityGrowingInterval);
+
+		// Put your drawing code here
+		//growCommunity();
+		console.log("Growing community!")
+
+    }
+}
+
+
+var problemsToSolvePerSecond = gameData.problemsPerSecondTotal;
+
+var stop = false
+var mainGameLoop = window.setInterval(function() {
+	if (gameData.problemsPerSecondTotal > problemsToSolvePerSecond) {
+		console.log("Main Loop. Changing rate to solve " + gameData.problemsPerSecondTotal + " problems per second")
+		changeRates(gameData.problemsPerSecondTotal);
+		problemsToSolvePerSecond = gameData.problemsPerSecondTotal;
+	}
+}, 10)
