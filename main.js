@@ -40,8 +40,8 @@ var itemsForSale = [
 	{id: 1, name: "Mikecoin hat", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 5, unlocked: false},
 	{id: 2, name: "Mikecoin t-shirt", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
 	{id: 3, name: "Invideo GFX 410 Graphics Card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
-	{id: 3, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
-	{id: 4, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false}
+	{id: 4, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
+	{id: 5, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false}
 ];
 
 function updateStore() {
@@ -89,41 +89,79 @@ function updateStore() {
 var inventoryArray = [];
 
 function updateInventory(itemId, quantity) {
-	console.log(itemId, quantity)
+	console.log("Updating Inventory. Buying quantity " + quantity + " of item with ID " + itemId);
 
-	for (var i = 0; i < itemsForSale.length; i++) {
-		if (itemsForSale[i].id == itemId) {
-			if (inventoryArray.length > 0) {
-				// Check to see if item is already in array 
-				for (var j = 0; j < inventoryArray.length; j++) {
-					if (inventoryArray[j][0] ==  itemsForSale[i].id) {
-						inventoryArray[j][2] += quantity
-					}
-				}
-			} else {
-				inventoryArray.push([itemsForSale[i].id, itemsForSale[i].name, quantity])
-			}
-			
-			console.log(itemsForSale[i].name)
+	var itemToAdd = {};
+	var quantityToBuy = quantity;
+
+	// Look up item to add in items for sale and store data
+	for (var s = 0; s < itemsForSale.length; s++) {
+		console.log("Updating Inventory. Item to buy with ID " + itemId + " being compared to available item to buy with id " + itemsForSale[s].id);
+		if (itemId == itemsForSale[s].id) {
+			itemToAdd = {id: itemsForSale[s].id, name: itemsForSale[s].name, quantity: quantityToBuy};
+			console.log("Updating Inventory. Looking up item to buy in itemsForSale. Match found! Breaking loop.")
+			break;
 		}
 	}
 
+	console.log("Updating Inventory. Item to add: ");
+	console.log(itemToAdd);
+
+	// Now that we know what we want to add we need to do two things
+
+	// First thing: check to see if we already own any of this item. If so, update quantity
+	// Second thing: if we don't already have one, add it.
+	if (inventoryArray.length > 0){
+		var itemAlreadyOwned = false;
+		var inventorySlotToUpdate;
+		for (var i = 0; i < inventoryArray.length; i++) {
+			console.log("Updating Inventory. Looping through inventory trying to match " + itemToAdd.id + " to inventory item with id " + inventoryArray[i].id + " to update quantity.");
+			if (itemToAdd.id == inventoryArray[i].id){
+				console.log("Updating Inventory. Match found! Time to update the quantity and exit this loop.")
+				itemAlreadyOwned = true;
+				inventorySlotToUpdate = i;
+				break;
+			}
+		}
+
+		// Update quantity of existing item, or add item
+		if (itemAlreadyOwned){		
+			inventoryArray[inventorySlotToUpdate].quantity += itemToAdd.quantity;
+		} else {
+			console.log("Updating Inventory. Match not found in existing item, so adding this item.")
+			inventoryArray.push(itemToAdd);
+		}
+	} else {
+		// if inventory is currently completely empty, we can just add this item as-is.
+		console.log("Updating Inventory. Since inventory was empty, adding this item.")
+		inventoryArray.push(itemToAdd);
+	}
+	
+	// Update the view on the screen
 	if (inventoryArray.length > 0) {
 		
+		// Remove the placeholder if inventory is no longer empty
 		try {
 			document.getElementById("inventory").removeChild(document.getElementById("inventory-placeholder"));
 		} catch {
-			console.log("nothing to remove from inventory")
+			console.log("Updating Inventory. No placeholder found in array.")
 		}
 
 		for (var k = 0; k < inventoryArray.length; k++) {
+//			console.log("Updating Inventory. Loading from inventory to update screen:");
+//			console.log(inventoryArray[k]);
 
-			inventoryContents = document.createElement('span');
-			var inventoryContentsId = "inventory-item-" + inventoryArray[k].id;
-			inventoryContents.setAttribute("id", inventoryContentsId)
-			inventoryContents.innerHTML = "Name: " + inventoryArray[k][1] + "<br>Quantity: " + inventoryArray[k][2] + "<br>";
+			if (!!document.getElementById("inventory-item-" + inventoryArray[k].id)) {
+				document.getElementById("inventory-item-" + inventoryArray[k].id + "-quantity").innerHTML = inventoryArray[k].quantity
+			} else {
+				inventoryContents = document.createElement('span');
+				var inventoryContentsId = "inventory-item-" + inventoryArray[k].id;
+				inventoryContents.setAttribute("id", inventoryContentsId)
+				inventoryContents.innerHTML = "Name: " + inventoryArray[k].name + "<br>Quantity: <span id=\"inventory-item-" + inventoryArray[k].id + "-quantity\">" + inventoryArray[k].quantity + "</span><br><br>";
+	
+				document.getElementById("inventory").appendChild(inventoryContents);
+			}
 
-			document.getElementById("inventory").appendChild(inventoryContents);
 
 		}
 	} else {
