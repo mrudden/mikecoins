@@ -83,6 +83,10 @@ function updateStore() {
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
 			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
+
+			// TODO: Check amount owned per ID in inventory and add buttons to buy more than 1 at a time - example, Buy 5, Buy 10, Buy 100, etc.
+			//if (itemsForSale[i].id )
+			
 			//console.log(storeContents);
 			document.getElementById("store").appendChild(storeContents);
 
@@ -247,12 +251,12 @@ function updateScreen(screenUpdateText) {
 	screen1 = screenUpdateText + "<br>";
 
 	document.getElementById("screen").innerHTML = 
-	"<span>" + screen6 + "</span>" + "\n" +
-	"<span>" + screen5 + "</span>" + "\n" +
-	"<span>" + screen4 + "</span>" + "\n" +
-	"<span>" + screen3 + "</span>" + "\n" +
-	"<span>" + screen2 + "</span>" + "\n" +
-	"<span><b>" + screen1 + "</b></span>" + "\n";
+	"<span>&nbsp;&nbsp;" + screen6 + "</span>" + "\n" +
+	"<span>&nbsp;&nbsp;" + screen5 + "</span>" + "\n" +
+	"<span>&nbsp;&nbsp;" + screen4 + "</span>" + "\n" +
+	"<span>&nbsp;&nbsp;" + screen3 + "</span>" + "\n" +
+	"<span>&nbsp;&nbsp;" + screen2 + "</span>" + "\n" +
+	"<span><b>> " + screen1 + "</b></span>" + "\n";
 }
 
 
