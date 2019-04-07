@@ -86,6 +86,19 @@ function updateStore() {
 
 			// TODO: Check amount owned per ID in inventory and add buttons to buy more than 1 at a time - example, Buy 5, Buy 10, Buy 100, etc.
 			//if (itemsForSale[i].id )
+			for (var j = 0; j < inventoryArray.length; j++) {
+				if (itemsForSale[i].id == inventoryArray[j].id) {
+
+					if (inventoryArray[j].quantity >= 5) {
+						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><br><br>";
+					} else if (inventoryArray[j].quantity >= 10) {
+						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><br><br>";
+					} else if (inventoryArray[j].quantity >= 100) {
+						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",100)\">Buy 100</button><br><br>";
+					}
+
+				}
+			}
 			
 			//console.log(storeContents);
 			document.getElementById("store").appendChild(storeContents);
@@ -201,15 +214,33 @@ function updateInventory(itemId, quantity) {
 	}
 }
 
+function calculateCostToBuy(cost, quantity) {
+
+	var costToReturn = cost * quantity;
+
+	//for (var c = 0; c < quantity; c++) {
+	//	costToReturn = costToReturn + (Math.floor(itemsForSale[i].cost * 1.1));
+	//}
+
+	/*for (var s = 0; s < itemsForSale.length; s++) {
+		if (itemsForSale[s].id == itemId) {
+			costToReturn = itemsForSale[s].cost * quantity;
+		}
+	}*/
+
+	return costToReturn;
+}
 
 // Buying an item
 
 function buyItem(itemId, quantity) {
 	for (var i = 0; i < itemsForSale.length; i++) {
 		if (itemsForSale[i].id == itemId) {
-			if (gameData.walletBalance >= itemsForSale[i].cost) {
+			var costToBuy = calculateCostToBuy(itemsForSale[i].cost, quantity);
+			if (gameData.walletBalance >= costToBuy) {
 
-				gameData.walletBalance -= itemsForSale[i].cost * quantity;
+				//gameData.walletBalance -= itemsForSale[i].cost * quantity;
+				gameData.walletBalance -= costToBuy;
 				document.getElementById("mikecoin-balance").innerHTML =  gameData.walletBalance;
 				updateInventory(itemId, quantity);
 				gameData.problemsPerClickTotal += itemsForSale[i].problemsPerClick;
