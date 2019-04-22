@@ -138,13 +138,26 @@ function populateInventoryArray() {
 }
 
 function updateInventory(itemId, quantity) {
-	console.log("Updating Inventory. Buying quantity " + quantity + " of item with ID " + itemId);
-
-	var itemToAdd = {};
-	var quantityToBuy = quantity;
-
-
 	
+	var itemIdToBuy = itemId;
+	var quantityToBuy = quantity;
+	console.log("Updating Inventory. Buying quantity " + quantityToBuy + " of item with ID " + itemIdToBuy);
+
+	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
+		if (itemIdToBuy == gameData.inventoryArrayTest[i].id){
+			console.log("Updating Inventory. Match found! Time to update the quantity and exit this loop.");
+			gameData.inventoryArrayTest[i].quantity += quantityToBuy;
+			break;
+		}
+	}
+	// Now test new version in console
+	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
+		console.log(gameData.inventoryArrayTest[i].id, gameData.inventoryArrayTest[i].name, gameData.inventoryArrayTest[i].desc, gameData.inventoryArrayTest[i].cost, gameData.inventoryArrayTest[i].quantity);
+	}
+
+	// Old Version - being updated with above code in place
+	/*
+	var itemToAdd = {};
 	// Look up item to add in items for sale and store data
 	for (var s = 0; s < itemsForSale.length; s++) {
 		console.log("Updating Inventory. Item to buy with ID " + itemId + " being compared to available item to buy with id " + itemsForSale[s].id);
@@ -192,7 +205,9 @@ function updateInventory(itemId, quantity) {
 	//inventoryArray.sort(function(a, b) {
 	//	return parseFloat(a.id) - parseFloat(b.id);
 	//});
-	
+	// End Old Version of Inventory
+
+
 	// Update the view on the screen
 	if (inventoryArray.length > 0) {
 		
@@ -229,6 +244,48 @@ function updateInventory(itemId, quantity) {
 	} else {
 		var inventoryContents = "You don't currently have any items!"
 		document.getElementById("inventory").innerHTML = inventoryContents;
+	}*/
+	// End Old Version of Inventory
+
+	// Update Screen
+	// This code should be kept from old version
+
+	try {
+		document.getElementById("inventory").removeChild(document.getElementById("inventory-placeholder"));
+	} catch {
+		console.log("Updating Inventory. No placeholder found in array.")
+	}
+
+	// Clear screen for update
+	document.getElementById("inventory").innerHTML = "";
+	var anyItemFound = false;
+
+	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
+		
+		console.log(gameData.inventoryArrayTest[i].id, gameData.inventoryArrayTest[i].name, gameData.inventoryArrayTest[i].desc, gameData.inventoryArrayTest[i].cost, gameData.inventoryArrayTest[i].quantity);
+
+
+		if (gameData.inventoryArrayTest[i].quantity > 0) {
+			anyItemFound = true;
+
+			//if (!!document.getElementById("inventory-item-" + gameData.inventoryArrayTest[i].id)) {
+			//	document.getElementById("inventory-item-" + gameData.inventoryArrayTest[i].id + "-quantity").innerHTML = gameData.inventoryArrayTest[i].quantity
+			//} else {
+			var inventoryContents = document.createElement('span');
+			var inventoryContentsId = "inventory-item-" + gameData.inventoryArrayTest[i].id;
+
+			inventoryContents.setAttribute("id", inventoryContentsId)
+			inventoryContents.innerHTML = "Name: " + gameData.inventoryArrayTest[i].name + "<br>Quantity: <span id=\"inventory-item-" + gameData.inventoryArrayTest[i].id + "-quantity\">" + gameData.inventoryArrayTest[i].quantity + "</span><br>";
+
+			document.getElementById("inventory").appendChild(inventoryContents);
+			document.getElementById("inventory").appendChild(document.createElement('br'));
+			//}
+		}
+	}
+
+	if (!anyItemFound) {
+		document.getElementById("inventory").appendChild(document.createElement('span').setAttribute("id", inventory-placeholder));
+		document.getElementById("inventory").innerHTML = inventoryPlaceholderText;
 	}
 }
 
@@ -432,6 +489,10 @@ function growCommunityOnInterval() {
 
 // Init stuff before running main loop
 window.onload = function() {
+	// Save placeholder text
+	var inventoryPlaceholderText = document.getElementById("inventory-placeholder").innerHTML;
+
+	// Run init functions
     populateInventoryArray();
 };
 
