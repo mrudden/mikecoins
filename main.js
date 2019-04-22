@@ -20,7 +20,6 @@ var gameData = {
 
 	// Inventory stuff
 	inventoryArray: [],
-	inventoryArrayTest: [],
 }
 
 
@@ -129,11 +128,11 @@ function populateInventoryArray() {
 	console.log("Inventory!!");
 	for (var s = 0; s < itemsForSale.length; s++) {
 		var itemToAdd = { id: itemsForSale[s].id, name: itemsForSale[s].name, desc: itemsForSale[s].desc, cost: itemsForSale[s].cost, quantity: 0 };
-		gameData.inventoryArrayTest.push(itemToAdd);
+		gameData.inventoryArray.push(itemToAdd);
 	}
 	// Test output
-	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
-		console.log(gameData.inventoryArrayTest[i].id, gameData.inventoryArrayTest[i].name, gameData.inventoryArrayTest[i].desc, gameData.inventoryArrayTest[i].cost, gameData.inventoryArrayTest[i].quantity);
+	for (var i = 0; i < gameData.inventoryArray.length; i++) {
+		console.log(gameData.inventoryArray[i].id, gameData.inventoryArray[i].name, gameData.inventoryArray[i].desc, gameData.inventoryArray[i].cost, gameData.inventoryArray[i].quantity);
 	}
 }
 
@@ -143,16 +142,16 @@ function updateInventory(itemId, quantity) {
 	var quantityToBuy = quantity;
 	console.log("Updating Inventory. Buying quantity " + quantityToBuy + " of item with ID " + itemIdToBuy);
 
-	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
-		if (itemIdToBuy == gameData.inventoryArrayTest[i].id){
+	for (var i = 0; i < gameData.inventoryArray.length; i++) {
+		if (itemIdToBuy == gameData.inventoryArray[i].id){
 			console.log("Updating Inventory. Match found! Time to update the quantity and exit this loop.");
-			gameData.inventoryArrayTest[i].quantity += quantityToBuy;
+			gameData.inventoryArray[i].quantity += quantityToBuy;
 			break;
 		}
 	}
 	// Now test new version in console
-	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
-		console.log(gameData.inventoryArrayTest[i].id, gameData.inventoryArrayTest[i].name, gameData.inventoryArrayTest[i].desc, gameData.inventoryArrayTest[i].cost, gameData.inventoryArrayTest[i].quantity);
+	for (var i = 0; i < gameData.inventoryArray.length; i++) {
+		console.log(gameData.inventoryArray[i].id, gameData.inventoryArray[i].name, gameData.inventoryArray[i].desc, gameData.inventoryArray[i].cost, gameData.inventoryArray[i].quantity);
 	}
 
 	// Old Version - being updated with above code in place
@@ -260,22 +259,22 @@ function updateInventory(itemId, quantity) {
 	document.getElementById("inventory").innerHTML = "";
 	var anyItemFound = false;
 
-	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
+	for (var i = 0; i < gameData.inventoryArray.length; i++) {
 		
-		console.log(gameData.inventoryArrayTest[i].id, gameData.inventoryArrayTest[i].name, gameData.inventoryArrayTest[i].desc, gameData.inventoryArrayTest[i].cost, gameData.inventoryArrayTest[i].quantity);
+		console.log(gameData.inventoryArray[i].id, gameData.inventoryArray[i].name, gameData.inventoryArray[i].desc, gameData.inventoryArray[i].cost, gameData.inventoryArray[i].quantity);
 
 
-		if (gameData.inventoryArrayTest[i].quantity > 0) {
+		if (gameData.inventoryArray[i].quantity > 0) {
 			anyItemFound = true;
 
-			//if (!!document.getElementById("inventory-item-" + gameData.inventoryArrayTest[i].id)) {
-			//	document.getElementById("inventory-item-" + gameData.inventoryArrayTest[i].id + "-quantity").innerHTML = gameData.inventoryArrayTest[i].quantity
+			//if (!!document.getElementById("inventory-item-" + gameData.inventoryArray[i].id)) {
+			//	document.getElementById("inventory-item-" + gameData.inventoryArray[i].id + "-quantity").innerHTML = gameData.inventoryArray[i].quantity
 			//} else {
 			var inventoryContents = document.createElement('span');
-			var inventoryContentsId = "inventory-item-" + gameData.inventoryArrayTest[i].id;
+			var inventoryContentsId = "inventory-item-" + gameData.inventoryArray[i].id;
 
 			inventoryContents.setAttribute("id", inventoryContentsId)
-			inventoryContents.innerHTML = "Name: " + gameData.inventoryArrayTest[i].name + "<br>Quantity: <span id=\"inventory-item-" + gameData.inventoryArrayTest[i].id + "-quantity\">" + gameData.inventoryArrayTest[i].quantity + "</span><br>";
+			inventoryContents.innerHTML = "Name: " + gameData.inventoryArray[i].name + "<br>Quantity: <span id=\"inventory-item-" + gameData.inventoryArray[i].id + "-quantity\">" + gameData.inventoryArray[i].quantity + "</span><br>";
 
 			document.getElementById("inventory").appendChild(inventoryContents);
 			document.getElementById("inventory").appendChild(document.createElement('br'));
