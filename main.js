@@ -86,42 +86,12 @@ function updateStore() {
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
 			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><span id=\"store-item-" + itemsForSale[i].id + "-buttons\"><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button></span><br><br>";
-
-			// TODO: Check amount owned per ID in inventory and add buttons to buy more than 1 at a time - example, Buy 5, Buy 10, Buy 100, etc.
-			//if (itemsForSale[i].id )
-			// This should be totally reworked a la inventory
-			/*for (var j = 0; j < gameData.inventoryArray.length; j++) {
-				//console.log("Comparing itemsForSale ID: " + itemsForSale[i].id + " to inventoryArray ID: " + gameData.inventoryArray[j].id);
-				if (itemsForSale[i].id == gameData.inventoryArray[j].id) {
-					console.log("ID match found")
-					console.log("You own quantity " + gameData.inventoryArray[j].quantity + " of item " + itemsForSale[i].name)
-					if (gameData.inventoryArray[j].quantity >= 5) {
-						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc  + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><br><br>";
-					} else if (gameData.inventoryArray[j].quantity >= 10) {
-						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc  + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><br><br>";
-					} else if (gameData.inventoryArray[j].quantity >= 100) {
-						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc  + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",100)\">Buy 100</button><br><br>";
-					} else {
-						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
-					}
-
-				}
-			}*/
 			
 			//console.log(storeContents);
 			document.getElementById("store").appendChild(storeContents);
 
-		} /*else {
-			var storeContents = document.createElement('span');
-			storeContents.innerHTML = "The store doesn't have anything for sale yet!";
-			storeContents.setAttribute("id", "store-placeholder");
-			document.getElementById("store").appendChild(storeContents);
-		}*/
-		//document.getElementById("store").appendChild(storeContents);
-		//storeContents = storeContents += "Name: " + itemsForSale[i].name + "<br>Cost: " + itemsForSale[i].cost + "<br><br>";
+		} 
 	}
-
-	//document.getElementById("store").innerHTML = storeContents;
 }
 
 
