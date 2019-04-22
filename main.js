@@ -16,7 +16,11 @@ var gameData = {
 	communityGrowthPerSecond: 0,
 
 	// How many mikecoins are out there
-	marketCap: 0
+	marketCap: 0,
+
+	// Inventory stuff
+	inventoryArray: [],
+	inventoryArrayTest: [],
 }
 
 
@@ -47,15 +51,15 @@ function updateEventLog(incomingEvent) {
 
 // Store
 var itemsForSale = [
-	{id: 1, name: "Double clicking", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 5, unlocked: false},
-	{id: 2, name: "Better mouse", cost: 30, problemsPerClick: 2, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
-	{id: 3, name: "Ask a friend for help", cost: 30, problemsPerClick: 3, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
-	{id: 4, name: "Mikecoin hat", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 30, unlocked: false},
-	{id: 5, name: "Invideo GFX 410 Graphics Card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
-	{id: 6, name: "Mikecoin t-shirt", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 40, unlocked: false},
-	{id: 7, name: "Invideo GFX 810 Graphics Card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
-	{id: 8, name: "Invideo GFX 1210 Graphics Card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false},
-	{id: 9, name: "ABC Solveon 16 Graphics Card", cost: 650, problemsPerClick: 0, problemsPerSecond: 16, costToUnlock: 1000, unlocked: false}
+	{id: 1, name: "Double clicking", desc: "Every click you make clicks twice!", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 5, unlocked: false},
+	{id: 2, name: "Better mouse", desc: "Clicking is twice as effective", cost: 30, problemsPerClick: 2, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
+	{id: 3, name: "Ask a friend for help", desc: "Best Friends Click Together", cost: 30, problemsPerClick: 3, problemsPerSecond: 0, costToUnlock: 15, unlocked: false},
+	{id: 4, name: "Mikecoin hat", desc: "Show your support with a hat!", cost: 15, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 30, unlocked: false},
+	{id: 5, name: "Invideo GFX 410 Graphics Card", desc: "Basic graphics card", cost: 50, problemsPerClick: 0, problemsPerSecond: 1, costToUnlock: 30, unlocked: false},
+	{id: 6, name: "Mikecoin t-shirt", desc: "Show the world that you like Mikecoins!", cost: 30, problemsPerClick: 1, problemsPerSecond: 0, costToUnlock: 40, unlocked: false},
+	{id: 7, name: "Invideo GFX 810 Graphics Card", desc: "Better graphics card", cost: 100, problemsPerClick: 0, problemsPerSecond: 3, costToUnlock: 50, unlocked: false},
+	{id: 8, name: "Invideo GFX 1210 Graphics Card", desc: "Top-of-the-line graphics card", cost: 200, problemsPerClick: 0, problemsPerSecond: 5, costToUnlock: 100, unlocked: false},
+	{id: 9, name: "ABC Solveon 16 Graphics Card", desc: "Basic graphics card that's better at solving these types of problems", cost: 650, problemsPerClick: 0, problemsPerSecond: 16, costToUnlock: 1000, unlocked: false}
 ];
 
 function updateStore() {
@@ -119,7 +123,19 @@ function updateStore() {
 
 // Inventory
 
-var inventoryArray = [];
+var inventoryArray = gameData.inventoryArray;
+
+function populateInventoryArray() {
+	console.log("Inventory!!");
+	for (var s = 0; s < itemsForSale.length; s++) {
+		var itemToAdd = { id: itemsForSale[s].id, name: itemsForSale[s].name, desc: itemsForSale[s].desc, cost: itemsForSale[s].cost, quantity: 0 };
+		gameData.inventoryArrayTest.push(itemToAdd);
+	}
+	// Test output
+	for (var i = 0; i < gameData.inventoryArrayTest.length; i++) {
+		console.log(gameData.inventoryArrayTest[i].id, gameData.inventoryArrayTest[i].name, gameData.inventoryArrayTest[i].desc, gameData.inventoryArrayTest[i].cost, gameData.inventoryArrayTest[i].quantity);
+	}
+}
 
 function updateInventory(itemId, quantity) {
 	console.log("Updating Inventory. Buying quantity " + quantity + " of item with ID " + itemId);
@@ -127,6 +143,8 @@ function updateInventory(itemId, quantity) {
 	var itemToAdd = {};
 	var quantityToBuy = quantity;
 
+
+	
 	// Look up item to add in items for sale and store data
 	for (var s = 0; s < itemsForSale.length; s++) {
 		console.log("Updating Inventory. Item to buy with ID " + itemId + " being compared to available item to buy with id " + itemsForSale[s].id);
@@ -412,6 +430,13 @@ function growCommunityOnInterval() {
 }
 
 
+// Init stuff before running main loop
+window.onload = function() {
+    populateInventoryArray();
+};
+
+
+// Run main loop
 var problemsToSolvePerSecond = gameData.problemsPerSecondTotal;
 
 var stop = false
