@@ -169,32 +169,29 @@ function calculateCostToBuy(cost, quantity) {
 
 	
 	var initialCost = cost;
-	console.log("cost:" + cost)
+
 	var newCost;
 	var finalNewCost;
 	var costToReturn = cost;
 
 	if (quantity > 1) {
 		for (var c = 0; c < (quantity - 1); c++) {
-			//console.log("initialCost: " + initialCost);
+
 			newCost = Math.floor(initialCost * 1.1);
-			//console.log("newCost: " + newCost)
+
 			costToReturn = costToReturn + newCost;
-			//console.log("costToReturn:" + costToReturn)
+
 
 			initialCost = newCost;
 			
 			finalNewCost = newCost;
 		}
+	} else {
+		newCost = Math.floor(initialCost * 1.1);
+		finalNewCost = newCost;
 	}
 
-	/*for (var s = 0; s < itemsForSale.length; s++) {
-		if (itemsForSale[s].id == itemId) {
-			costToReturn = itemsForSale[s].cost * quantity;
-		}
-	}*/
-
-	return costToReturn;
+	return [costToReturn, finalNewCost];
 }
 
 // Buying an item
@@ -202,8 +199,10 @@ function calculateCostToBuy(cost, quantity) {
 function buyItem(itemId, quantity) {
 	for (var s = 0; s < itemsForSale.length; s++) {
 		if (itemsForSale[s].id == itemId) {
-			var costToBuy = calculateCostToBuy(itemsForSale[s].cost, quantity);
-			//var newCost = calculateCostToBuy(itemsForSale[s].cost, quantity)[1];
+			var costCalculations = calculateCostToBuy(itemsForSale[s].cost, quantity)
+			//console.log(costCalculations)
+			var costToBuy = costCalculations[0];
+			var newCost = calculateCostToBuy(itemsForSale[s].cost, quantity)[1];
 			if (gameData.walletBalance >= costToBuy) {
 
 				//gameData.walletBalance -= itemsForSale[s].cost * quantity;
@@ -216,7 +215,8 @@ function buyItem(itemId, quantity) {
 				updateEventLog("Bought 1 " + itemsForSale[s].name);
 
 				// Update the price
-				var newCost = Math.floor(itemsForSale[s].cost * 1.1);
+				//var newCost = Math.floor(itemsForSale[s].cost * 1.1);
+				//var newCost = costCalculations[1];
 				console.log("Buying Item. Updating cost of this item from " + itemsForSale[s].cost + " to " + newCost + ".");
 				itemsForSale[s].cost = newCost;
 				// Update price in store view
@@ -243,7 +243,7 @@ function buyItem(itemId, quantity) {
 
 				//updateStore();
 			} else {
-				console.log("Buying Item. Not enough money to purchase! You have " + gameData.walletBalance + " but you need " + calculateCostToBuy(itemsForSale[s].cost, quantity) + ".");
+				console.log("Buying Item. Not enough money to purchase! You have " + gameData.walletBalance + " but you need " + costToBuy + ".");
 			}
 		}
 	}
