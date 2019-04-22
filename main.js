@@ -199,13 +199,15 @@ function calculateCostToBuy(cost, quantity) {
 function buyItem(itemId, quantity) {
 	for (var s = 0; s < itemsForSale.length; s++) {
 		if (itemsForSale[s].id == itemId) {
+
+			// Calculate cost to buy and update to cost
 			var costCalculations = calculateCostToBuy(itemsForSale[s].cost, quantity)
-			//console.log(costCalculations)
 			var costToBuy = costCalculations[0];
-			var newCost = calculateCostToBuy(itemsForSale[s].cost, quantity)[1];
+			var newCost = costCalculations[1];
+
 			if (gameData.walletBalance >= costToBuy) {
 
-				//gameData.walletBalance -= itemsForSale[s].cost * quantity;
+
 				gameData.walletBalance -= costToBuy;
 				document.getElementById("mikecoin-balance").innerHTML =  gameData.walletBalance;
 				updateInventory(itemId, quantity);
@@ -215,15 +217,12 @@ function buyItem(itemId, quantity) {
 				updateEventLog("Bought 1 " + itemsForSale[s].name);
 
 				// Update the price
-				//var newCost = Math.floor(itemsForSale[s].cost * 1.1);
-				//var newCost = costCalculations[1];
 				console.log("Buying Item. Updating cost of this item from " + itemsForSale[s].cost + " to " + newCost + ".");
 				itemsForSale[s].cost = newCost;
 				// Update price in store view
 				document.getElementById("store-item-" + itemsForSale[s].id + "-cost").innerHTML = itemsForSale[s].cost;
 
 				// Update buy buttons
-				//TODO: Make cost of bulk buying equal to the adjusted balance of all, not just a 'bulk discount' at current rates
 				for (var i = 0; i < gameData.inventoryArray.length; i++) {
 					//console.log("Comparing itemsForSale ID: " + itemsForSale[s].id + " to inventoryArray ID: " + gameData.inventoryArray[i].id);
 					if (itemsForSale[s].id == gameData.inventoryArray[i].id) {
@@ -240,8 +239,6 @@ function buyItem(itemId, quantity) {
 	
 					}
 				}
-
-				//updateStore();
 			} else {
 				console.log("Buying Item. Not enough money to purchase! You have " + gameData.walletBalance + " but you need " + costToBuy + ".");
 			}
