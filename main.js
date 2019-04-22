@@ -62,10 +62,6 @@ var itemsForSale = [
 ];
 
 function updateStore() {
-
-	//var storeContents;
-	//storeContents.innerHTML = "The store doesn't have anything for sale yet!";
-
 	
 	for (var i = 0; i < itemsForSale.length; i++) {
 		//console.log(itemsForSale[i].name);
