@@ -167,11 +167,26 @@ function updateInventory(itemId, quantity) {
 
 function calculateCostToBuy(cost, quantity) {
 
-	var costToReturn = cost * quantity;
+	
+	var initialCost = cost;
+	console.log("cost:" + cost)
+	var newCost;
+	var finalNewCost;
+	var costToReturn = cost;
 
-	//for (var c = 0; c < quantity; c++) {
-	//	costToReturn = costToReturn + (Math.floor(itemsForSale[i].cost * 1.1));
-	//}
+	if (quantity > 1) {
+		for (var c = 0; c < (quantity - 1); c++) {
+			//console.log("initialCost: " + initialCost);
+			newCost = Math.floor(initialCost * 1.1);
+			//console.log("newCost: " + newCost)
+			costToReturn = costToReturn + newCost;
+			//console.log("costToReturn:" + costToReturn)
+
+			initialCost = newCost;
+			
+			finalNewCost = newCost;
+		}
+	}
 
 	/*for (var s = 0; s < itemsForSale.length; s++) {
 		if (itemsForSale[s].id == itemId) {
@@ -188,6 +203,7 @@ function buyItem(itemId, quantity) {
 	for (var s = 0; s < itemsForSale.length; s++) {
 		if (itemsForSale[s].id == itemId) {
 			var costToBuy = calculateCostToBuy(itemsForSale[s].cost, quantity);
+			//var newCost = calculateCostToBuy(itemsForSale[s].cost, quantity)[1];
 			if (gameData.walletBalance >= costToBuy) {
 
 				//gameData.walletBalance -= itemsForSale[s].cost * quantity;
@@ -227,7 +243,7 @@ function buyItem(itemId, quantity) {
 
 				//updateStore();
 			} else {
-				console.log("Buying Item. Not enough money to purchase! You have " + gameData.walletBalance + " but you need " + itemsForSale[s].cost + ".");
+				console.log("Buying Item. Not enough money to purchase! You have " + gameData.walletBalance + " but you need " + calculateCostToBuy(itemsForSale[s].cost, quantity) + ".");
 			}
 		}
 	}
