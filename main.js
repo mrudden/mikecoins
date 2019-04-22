@@ -85,18 +85,19 @@ function updateStore() {
 			var storeContents = document.createElement('span');
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
-			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
+			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><br><br>";
 
 			// TODO: Check amount owned per ID in inventory and add buttons to buy more than 1 at a time - example, Buy 5, Buy 10, Buy 100, etc.
 			//if (itemsForSale[i].id )
-			for (var j = 0; j < inventoryArray.length; j++) {
-				if (itemsForSale[i].id == inventoryArray[j].id) {
+			// This should be totally reworked a la inventory
+			for (var j = 0; j < gameData.inventoryArray.length; j++) {
+				if (itemsForSale[i].id == gameData.inventoryArray[j].id) {
 
-					if (inventoryArray[j].quantity >= 5) {
+					if (gameData.inventoryArray[j].quantity >= 5) {
 						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><br><br>";
-					} else if (inventoryArray[j].quantity >= 10) {
+					} else if (gameData.inventoryArray[j].quantity >= 10) {
 						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><br><br>";
-					} else if (inventoryArray[j].quantity >= 100) {
+					} else if (gameData.inventoryArray[j].quantity >= 100) {
 						storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",100)\">Buy 100</button><br><br>";
 					}
 
@@ -154,100 +155,7 @@ function updateInventory(itemId, quantity) {
 		console.log(gameData.inventoryArray[i].id, gameData.inventoryArray[i].name, gameData.inventoryArray[i].desc, gameData.inventoryArray[i].cost, gameData.inventoryArray[i].quantity);
 	}
 
-	// Old Version - being updated with above code in place
-	/*
-	var itemToAdd = {};
-	// Look up item to add in items for sale and store data
-	for (var s = 0; s < itemsForSale.length; s++) {
-		console.log("Updating Inventory. Item to buy with ID " + itemId + " being compared to available item to buy with id " + itemsForSale[s].id);
-		if (itemId == itemsForSale[s].id) {
-			itemToAdd = {id: itemsForSale[s].id, name: itemsForSale[s].name, quantity: quantityToBuy};
-			console.log("Updating Inventory. Looking up item to buy in itemsForSale. Match found! Breaking loop.")
-			break;
-		}
-	}
-
-	console.log("Updating Inventory. Item to add: ");
-	console.log(itemToAdd);
-
-	// Now that we know what we want to add we need to do two things
-
-	// First thing: check to see if we already own any of this item. If so, update quantity
-	// Second thing: if we don't already have one, add it.
-	if (inventoryArray.length > 0){
-		var itemAlreadyOwned = false;
-		var inventorySlotToUpdate;
-		for (var i = 0; i < inventoryArray.length; i++) {
-			console.log("Updating Inventory. Looping through inventory trying to match " + itemToAdd.id + " to inventory item with id " + inventoryArray[i].id + " to update quantity.");
-			if (itemToAdd.id == inventoryArray[i].id){
-				console.log("Updating Inventory. Match found! Time to update the quantity and exit this loop.")
-				itemAlreadyOwned = true;
-				inventorySlotToUpdate = i;
-				break;
-			}
-		}
-
-		// Update quantity of existing item, or add item
-		if (itemAlreadyOwned){		
-			inventoryArray[inventorySlotToUpdate].quantity += itemToAdd.quantity;
-		} else {
-			console.log("Updating Inventory. Match not found in existing item, so adding this item.")
-			inventoryArray.push(itemToAdd);
-		}
-	} else {
-		// if inventory is currently completely empty, we can just add this item as-is.
-		console.log("Updating Inventory. Since inventory was empty, adding this item.")
-		inventoryArray.push(itemToAdd);
-	}
-
-	// Sort the inventory by ID ascending
-	//inventoryArray.sort(function(a, b) {
-	//	return parseFloat(a.id) - parseFloat(b.id);
-	//});
-	// End Old Version of Inventory
-
-
-	// Update the view on the screen
-	if (inventoryArray.length > 0) {
-		
-		// Remove the placeholder if inventory is no longer empty
-		try {
-			document.getElementById("inventory").removeChild(document.getElementById("inventory-placeholder"));
-		} catch {
-			console.log("Updating Inventory. No placeholder found in array.")
-		}
-
-		for (var k = 0; k < inventoryArray.length; k++) {
-//			console.log("Updating Inventory. Loading from inventory to update screen:");
-//			console.log(inventoryArray[k]);
-
-			if (!!document.getElementById("inventory-item-" + inventoryArray[k].id)) {
-				document.getElementById("inventory-item-" + inventoryArray[k].id + "-quantity").innerHTML = inventoryArray[k].quantity
-			} else {
-				inventoryContents = document.createElement('span');
-				var inventoryContentsId = "inventory-item-" + inventoryArray[k].id;
-				inventoryContents.setAttribute("id", inventoryContentsId)
-				inventoryContents.innerHTML = "Name: " + inventoryArray[k].name + "<br>Quantity: <span id=\"inventory-item-" + inventoryArray[k].id + "-quantity\">" + inventoryArray[k].quantity + "</span><br>";
-	
-				// If you already have an item in your inventory, append a line break before the next one
-				if (k > 0) {
-					document.getElementById("inventory").appendChild(document.createElement('br'));
-				}
-
-				document.getElementById("inventory").appendChild(inventoryContents);
-
-			}
-
-
-		}
-	} else {
-		var inventoryContents = "You don't currently have any items!"
-		document.getElementById("inventory").innerHTML = inventoryContents;
-	}*/
-	// End Old Version of Inventory
-
 	// Update Screen
-	// This code should be kept from old version
 
 	try {
 		document.getElementById("inventory").removeChild(document.getElementById("inventory-placeholder"));
@@ -490,6 +398,7 @@ function growCommunityOnInterval() {
 window.onload = function() {
 	// Save placeholder text
 	var inventoryPlaceholderText = document.getElementById("inventory-placeholder").innerHTML;
+	var storePlaceholderText = document.getElementById("store-placeholder").innerHTML;
 
 	// Run init functions
     populateInventoryArray();
