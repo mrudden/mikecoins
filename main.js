@@ -1,5 +1,7 @@
 // Mikecoin scripts!!
 
+var debug = false;
+
 var gameData = {
 
 	// How many Mikecoins you have
@@ -41,9 +43,9 @@ function updateEventLog(incomingEvent) {
 	document.getElementById("event-log").innerHTML = 
 		//"<span>" + event5 + "</span>" + "\n" +
 		//"<span>" + event4 + "</span>" + "\n" +
-		"<span>" + event3 + "</span>" + "\n" +
-		"<span>" + event2 + "</span>" + "\n" +
-		"<span><b>" + event1 + "</b></span>" + "\n";
+		"<span id=\"event-log-secondary-text\">" + event3 + "</span>" + "\n" +
+		"<span id=\"event-log-secondary-text\">" + event2 + "</span>" + "\n" +
+		"<span id=\"event-log-primary-text\">" + event1 + "</span>" + "\n";
 }
 
 
@@ -81,7 +83,7 @@ function updateStore() {
 			var storeContents = document.createElement('span');
 			var storeContentsId = "store-item-" + itemsForSale[i].id;
 			storeContents.setAttribute("id", storeContentsId)
-			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><span id=\"store-item-" + itemsForSale[i].id + "-buttons\"><button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button></span><br><br>";
+			storeContents.innerHTML = "Name: " + itemsForSale[i].name + "<br>Description: " + itemsForSale[i].desc + "<br>Cost: <span id=\"store-item-" + itemsForSale[i].id + "-cost\">" + itemsForSale[i].cost + "</span><br><span id=\"store-item-" + itemsForSale[i].id + "-buttons\"><button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button></span><br><br>";
 			
 			//console.log(storeContents);
 			document.getElementById("store").appendChild(storeContents);
@@ -96,15 +98,19 @@ function updateStore() {
 var inventoryArray = gameData.inventoryArray;
 
 function populateInventoryArray() {
-	console.log("Initializing Inventory!");
+
 	for (var s = 0; s < itemsForSale.length; s++) {
 		var itemToAdd = { id: itemsForSale[s].id, name: itemsForSale[s].name, desc: itemsForSale[s].desc, cost: itemsForSale[s].cost, quantity: 0 };
 		gameData.inventoryArray.push(itemToAdd);
 	}
 	// Test output in console
-	for (var i = 0; i < gameData.inventoryArray.length; i++) {
-		console.log(gameData.inventoryArray[i].id, gameData.inventoryArray[i].name, gameData.inventoryArray[i].desc, gameData.inventoryArray[i].cost, gameData.inventoryArray[i].quantity);
+	if (debug) {
+		console.log("Initializing Inventory!");
+		for (var i = 0; i < gameData.inventoryArray.length; i++) {
+			console.log(gameData.inventoryArray[i].id, gameData.inventoryArray[i].name, gameData.inventoryArray[i].desc, gameData.inventoryArray[i].cost, gameData.inventoryArray[i].quantity);
+		}
 	}
+	
 }
 
 function updateInventory(itemId, quantity) {
@@ -229,11 +235,11 @@ function buyItem(itemId, quantity) {
 						console.log("ID match found")
 						console.log("You own quantity " + gameData.inventoryArray[i].quantity + " of item " + itemsForSale[s].name)
 						if (gameData.inventoryArray[i].quantity >= 100) {
-							document.getElementById("store-item-" + itemsForSale[s].id + "-buttons").innerHTML = "<button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",100)\">Buy 100</button>";
+							document.getElementById("store-item-" + itemsForSale[s].id + "-buttons").innerHTML = "<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button>&nbsp;<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button>&nbsp;<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button>&nbsp;<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",100)\">Buy 100</button>";
 						} else if (gameData.inventoryArray[i].quantity >= 10) {
-							document.getElementById("store-item-" + itemsForSale[s].id + "-buttons").innerHTML = "<button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button>";
+							document.getElementById("store-item-" + itemsForSale[s].id + "-buttons").innerHTML = "<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button>&nbsp;<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button>&nbsp;<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",10)\">Buy 10</button>";
 						} else if (gameData.inventoryArray[i].quantity >= 5) {
-							document.getElementById("store-item-" + itemsForSale[s].id + "-buttons").innerHTML = "<button onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button><button onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button>";
+							document.getElementById("store-item-" + itemsForSale[s].id + "-buttons").innerHTML = "<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",1)\">Buy 1</button>&nbsp;<button class=\"btn btn-outline-primary\" onclick=\"buyItem(" + itemsForSale[i].id + ",5)\">Buy 5</button>";
 
 						}
 	

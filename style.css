@@ -1,6 +1,35 @@
+#event-log {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #282828;
+}
+
+#event-log-primary-text {
+    color: white;
+}
+
+#event-log-secondary-text {
+    color: gray;
+}
+
 #screen {
     font-family: 'Courier New', Courier, monospace;
-    background-color: black;
+    background-color: #282828;
     color: white;
     width: 175px;
+}
+
+
+/* Bootstrap adjustments */
+
+.container {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+h1 {
+    font-family: 'VT323', monospace;
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
 }
