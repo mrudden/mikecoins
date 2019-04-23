@@ -1,3 +1,9 @@
+body {
+    color: white;
+    background-color: #2b1c6d;
+    /*background-image: linear-gradient( #2a1b6d, #322d57, #c61f48, #c21853, #0098a8, #ef2b63);*/
+}
+
 #event-log {
     font-family: 'Courier New', Courier, monospace;
     background-color: #282828;
@@ -33,4 +39,52 @@ h1 {
 
 p {
     font-family: 'Open Sans', sans-serif;
+}
+
+.btn-primary {
+    background-color: #ef2b63;
+    border-color: #ef2b63;
+}
+
+.btn-primary:hover {
+    background-color: #be0e40;
+    border-color: #be0e40;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+    /*box-shadow: 0 0 0 0.2rem rgba(239, 43, 99, 0.5) !important;*/
+    box-shadow: none;
+    background-color: rgba(239, 43, 99, 0.5) !important;
+    border-color: rgba(239, 43, 99, 0.5) !important;
+}
+
+.btn-primary:active {
+    /*box-shadow: 0 0 0 0.2rem rgba(239, 43, 99, 0.5) !important;*/
+    box-shadow: none;
+    background-color: rgba(239, 43, 99, 0.5) !important;
+    border-color: rgba(239, 43, 99, 0.5) !important;
+}
+
+.btn-outline-primary {
+    color:  #ef2b63;
+    border-color: #ef2b63;
+}
+
+.btn-outline-primary:hover {
+    background-color: #ef2b63;
+    border-color: #ef2b63;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+    /*box-shadow: 0 0 0 0.2rem rgba(239, 43, 99, 0.5) !important;*/
+    box-shadow: none;
+    background-color: rgba(239, 43, 99, 0.5) !important;
+    border-color: rgba(239, 43, 99, 0.5) !important;
+}
+
+.btn-outline-primary:active {
+    /*box-shadow: 0 0 0 0.2rem rgba(239, 43, 99, 0.5) !important;*/
+    box-shadow: none;
+    background-color: rgba(239, 43, 99, 0.5) !important;
+    border-color: rgba(239, 43, 99, 0.5) !important;
 }
