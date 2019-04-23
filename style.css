@@ -10,11 +10,11 @@ body {
 }
 
 #event-log-primary-text {
-    color: white;
+    color: rgb(255, 176, 0);
 }
 
 #event-log-secondary-text {
-    color: gray;
+    color: rgba(255, 204, 0, 0.5);
 }
 
 #screen {
