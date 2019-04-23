@@ -299,7 +299,7 @@ function solveProblem() {
 	var payout = Math.floor(Math.random() * payoutRange) + 5;
 
 	if (num1 + num2 == solution) {
-		var problem = num1 + " + " + num2 + " = " + solution + " <font color=\"green\">&#x2713;</font>";
+		var problem = num1 + " + " + num2 + " = " + solution + " <font color=\"#33FF00\">&#x2713;</font>";
 		updateScreen(problem);
 
 		var payoutEvent = "You have earned " + payout + " Mikecoins!";
