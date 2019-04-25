@@ -7,6 +7,7 @@ body {
 #event-log {
     font-family: 'Courier New', Courier, monospace;
     background-color: #282828;
+    width: 500px;
 }
 
 #event-log-primary-text {
