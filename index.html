@@ -9,11 +9,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 	<!-- Fonts -->
+
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet"> 
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300i" rel="stylesheet"> 
 
 	<!-- Mikecoin stylesheet -->
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link id="style" rel="stylesheet" type="text/css" href="style.css">
 
 	<title>Mikecoin Miner HD</title>
 </head>
@@ -97,10 +99,17 @@
 		<br>
 		<br>
 		<span id="lifetime-balance">0</span> total Mikecoins earned in your lifetime
+		<br>
+		<br>
+		<hr>
+		<button id="style-switcher" class="btn btn-primary" onclick="switchStyle()">Toggle Cyber Mode</button>
+		<br>
+		<br>
 	</div>
 
 	<!-- Mikecoins scripts -->
 	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="display.js"></script>
 
 	<!-- Bootstrap scripts -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

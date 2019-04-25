@@ -10,6 +10,7 @@ var gameData = {
 	lifetimeBalance: 0,
 	// Solving math problems is how to get Mikecoins
 	// increase this with some kind of weird helper like ants in the wires
+	problemDifficulty: 1,
 	problemsPerClickTotal: 1,
 	problemsPerSecondTotal: 0,
 
@@ -302,7 +303,7 @@ function solveProblem() {
 		var problem = num1 + " + " + num2 + " = " + solution + " <font color=\"#33FF00\">&#x2713;</font>";
 		updateScreen(problem);
 
-		var payoutEvent = "You have earned " + payout + " Mikecoins!";
+		var payoutEvent = "You earned " + payout + " Mikecoins!";
 		updateEventLog(payoutEvent);
 
 		// Update current wallet and lifetime count
